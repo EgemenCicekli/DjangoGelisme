@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h3>Makaleler</h3>
+        <hr>
+    </div>
+</div>
+<div class="row">   
+    <div class="col-md-6 offset-md-3">
+        <form >
+            {% csrf_token %}
+            <input type="text" name ="keyword" class= "input-sm" placeholder="Ara..." maxlenght="64">
+            <button type="subimt" class="btn btn-danger">Ara</button>
+        </form>
+    </div>
+</div>
+
+{% if articles %}
+    {% for article in articles %}
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+      <!-- Post Content Column -->
+
+        <!-- Title -->
+        <a href="{% url 'article:detail' article.id %}"><h3 class="mt-4">{{article.title}}</h3></a>
+
+        <!-- Author -->
+        <h6><strong>{{article.author.username}}</strong></h6>
+
+        <!-- Preview Image -->
+        {% if article.article_image %}
+            <a href="{% url 'article:detail' article.id %}"><img class="img-fluid rounded" src="{{article.article_image.url}}" alt=""></a>
+        {% endif %}
+        
+        <hr>
+         
+
+        <!-- Post Content -->
+        <p class="lead"> 
+            {{article.content|safe|truncatewords:26}} <a href="{% url 'article:detail' article.id %}">Devamını Oku</a>
+        </p>
+      </div>    
+    </div>
+    
+    {% endfor %}
+{% else %}
+<br>
+<div class="row">   
+    <div class="col-md-6 offset-md-3">
+        <div class = "alert alert-danger">Makale Bulunmuyor</div>
+    </div>
+</div>
+{% endif %}
+{% endblock body %}
